@@ -1,0 +1,14 @@
+{
+    "name": "GraphicalEditor",
+    "description": "Graphical Editor",
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*",
+        "phpspec/prophecy-phpunit": "~1.0",
+        "phpspec/prophecy": "1.4.1",
+        "crysalead/kahlan": "~1.1",
+        "squizlabs/php_codesniffer": "^2.3"
+    }
+}
