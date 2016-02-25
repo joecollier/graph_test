@@ -1,9 +1,8 @@
 <?php
-namespace Editor\Library\Models;
+namespace Editor\Models;
 
 use kahlan\plugin\Stub;
-// use kahlan\plugin\Monkey;
-use Editor\Library\Models\drawImage;
+use Editor\Models\drawImage;
 
 describe('drawImage', function () {
     beforeEach(function () {

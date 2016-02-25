@@ -1,5 +1,5 @@
 <?php
-    namespace Editor\Library;
+    namespace Editor\Controllers;
 
     class ioController {
         public function __construct() {

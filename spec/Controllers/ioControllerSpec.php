@@ -1,9 +1,9 @@
 <?php
-namespace Editor\Library;
+namespace Editor\Controllers;
 
 use kahlan\plugin\Stub;
 use kahlan\plugin\Monkey;
-use Editor\Library\ioController;
+use Editor\Controllers\ioController;
 
 describe('ioController', function () {
     beforeEach(function () {

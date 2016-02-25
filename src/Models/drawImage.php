@@ -1,5 +1,5 @@
 <?php
-    namespace Editor\Library\Models;
+    namespace Editor\Models;
 
     class drawImage {
         protected $current_image = [];
