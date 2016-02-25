@@ -9,10 +9,6 @@ describe('drawImage', function () {
         $this->drawImage = Stub::create([
             'extends' => drawImage::class
         ]);
-
-        Stub::on($this->drawImage)
-            ->method('getCurrentImage')
-            ->andReturn([["O","X"],["O","X"],["O","X"]]);
     });
 
     describe('->drawNewImage()', function () {
@@ -36,21 +32,66 @@ describe('drawImage', function () {
                 ["O","O"]
             ];
 
+            Stub::on($this->drawImage)
+                ->method('getCurrentImage')
+                ->andReturn([["O","X"],["O","X"],["O","X"]]);
+
             expect($this->drawImage->clearImage())->toEqual($expected);
         });
     });
 
     describe('->colorPixel()', function () {
         it('coloring a pixel within the image boundaries sets a new image', function () {
+            Stub::on($this->drawImage)
+                ->method('getCurrentImage')
+                ->andReturn([["O","X"],["O","X"],["O","X"]]);
+
             expect($this->drawImage)->toReceive('getCurrentImage');
             expect($this->drawImage)->toReceive('setCurrentImage');
             $this->drawImage->colorPixel(1, 1, "R");
         });
+    });
 
-        // it('coloring a pixel outsideof the image boundaries throws an exception', function () {
-        //     expect($this->drawImage->colorPixel(1, 10, "R"))->toThrow(
-        //         new \Exception("Pixel selected to be colored is outside of the image bounderies")
-        //     );
-        // });
+    describe('->drawVertical()', function () {
+        it('draws vertical line with color R from y=1 to y=2 in column 2', function () {
+            $expected = [
+                ["O","R"],
+                ["O","R"],
+                ["O","X"]
+            ];
+
+            $this->drawImage->current_image = [["O","X"],["O","X"],["O","X"]];
+            $this->drawImage->drawVertical(2, 1, 2, "R");
+
+            expect($this->drawImage->current_image)->toEqual($expected);
+        });
+
+        it('draws vertical line with color R from y=2 to y=3 in column 1', function () {
+            $expected = [
+                ["O","X"],
+                ["R","X"],
+                ["R","X"]
+            ];
+
+            $this->drawImage->current_image = [["O","X"],["O","X"],["O","X"]];
+            $this->drawImage->drawVertical(1, 2, 3, "R");
+
+            expect($this->drawImage->current_image)->toEqual($expected);
+        });
+    });
+
+    describe('->drawHorizontal()', function () {
+        it('draws horizontal line with color R from x=2 to x=3 in row 2', function () {
+            $expected = [
+                ["O","X","O"],
+                ["O","R","R"],
+                ["O","X","O"]
+            ];
+
+            $this->drawImage->current_image = [["O","X","O"],["O","X","O"],["O","X","O"]];
+            $this->drawImage->drawHorizontal(2, 3, 2, "R");
+
+            expect($this->drawImage->current_image)->toEqual($expected);
+        });
     });
 });

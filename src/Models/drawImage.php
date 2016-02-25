@@ -2,7 +2,7 @@
     namespace Editor\Models;
 
     class drawImage {
-        protected $current_image = [];
+        public $current_image = [];
 
         public function __construct() {
             //$this->promptUser();
@@ -57,40 +57,25 @@
         }
 
         public function drawVertical($x, $y1, $y2, $c)
-        {
-            return [];
+        {   
+            $current_image = $this->getCurrentImage();
+
+            foreach ($current_image as $col_num => $row) {
+                if ($col_num >= ($y1-1) && $col_num <= ($y2-1)) {
+                    $this->colorPixel(($x-1), $col_num, $c);
+                }
+            }
         }
 
-        // /* Prompts user for input continously until the session is terminated
-        //  */
-        // protected function promptUser() {
-        //     do {
-        //         echo "Please enter a valid command: ";
-        //         $input = rtrim(fgets(STDIN), "\n\r");       
-        //     } while ($this->parseUserInput($input));
-        // }
+        public function drawHorizontal($x1, $x2, $y, $c)
+        {   
+            $current_image = $this->getCurrentImage();
 
-        //  Users input will determine if the image needs to be drawn,
-        //  * shown, or if the application should be terminated.
-        //  *
-        //  * @param string $input
-        //  *
-        //  * @return bool
-         
-        // protected function parseUserInput($input) 
-        // {
-        //     if (!is_string($input) || $input == "x") {
-        //         return false;
-        //     }
-
-        //     $this->handleUserInput($input);
-
-        //     return true;
-        // }
-
-        // protected function handleUserInput($input) 
-        // {
-        //     echo "input";
-        // }
+            foreach ($current_image[($y-1)] as $x_position => $pixel) {
+                if ($x_position >= ($x1-1) && $x_position <= ($x2-1)) {
+                    $this->colorPixel($x_position, ($y-1), $c);
+                }
+            }
+        }
     }
 ?>
