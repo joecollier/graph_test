@@ -18,24 +18,6 @@
 
         }
 
-        public function run($params, $current_image = [])
-        {
-            $function_name = $this->getFunctionName($params[0]);
-
-            if ($function_name) {
-                $this->setCurrentImage($current_image);
-
-                array_shift($params);
-                call_user_func_array([$this, $function_name], $params);
-
-                return $this->getCurrentImage();
-            } else {
-                echo "Invalid command!\n";
-            }
-
-            return false;  
-        }
-
         /* Returns function name corresponding to input value or
          * false if no function is found
          *
@@ -150,5 +132,23 @@
 
         //     $this->colorPixel($x-1, $y-1, $c);
         // }
+
+        public function run($params, $current_image = [])
+        {
+            $function_name = $this->getFunctionName($params[0]);
+
+            if ($function_name) {
+                $this->setCurrentImage($current_image);
+
+                array_shift($params);
+                call_user_func_array([$this, $function_name], $params);
+
+                return $this->getCurrentImage();
+            } else {
+                echo "Invalid command!\n";
+            }
+
+            return false;  
+        }
     }
 ?>
