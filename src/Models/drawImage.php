@@ -2,12 +2,65 @@
     namespace Editor\Models;
 
     class drawImage {
+        protected $command_function_map = [
+            "I" => 'drawNewImage',
+            "C" => 'clearImage',
+            "L" => 'colorPixel',
+            "V" => 'drawVertical',
+            "H" => 'drawHorizontal',
+            "S" => 'showImage'
+        ];
+
         public $current_image = [];
 
-        public function __construct($function, $params) {
-            $this->setCurrentImage($this->drawNewImage($params[1], $params[2]));
+        public function __construct()
+        {
 
-            return $this->getCurrentImage();
+        }
+
+        public function run($params, $current_image = [])
+        {
+            $function_name = $this->getFunctionName($params[0]);
+
+            if ($function_name) {
+                $this->setCurrentImage($current_image);
+
+                array_shift($params);
+                call_user_func_array([$this, $function_name], $params);
+
+                return $this->getCurrentImage();
+            } else {
+                echo "Invalid command!\n";
+            }
+
+            return false;  
+        }
+
+        /* Returns function name corresponding to input value or
+         * false if no function is found
+         *
+         * @param string $command
+         *
+         * @return mixed
+         */
+        protected function getFunctionName($command)
+        {
+            return isset($this->command_function_map[$command])
+                ? $this->command_function_map[$command]
+                : false;
+        }
+
+        protected function showImage()
+        {
+            $image = $this->getCurrentImage();
+            
+            foreach ($image as $row) {
+                foreach ($row as $pixel) {
+                    echo $pixel;
+                }
+
+                echo "\n";
+            }
         }
 
         protected function getCurrentImage()
@@ -35,7 +88,11 @@
 
         public function drawNewImage($x, $y)
         {
-            return array_fill(0, $y, array_fill(0, $x, "O"));
+            $image = array_fill(0, $y, array_fill(0, $x, "O"));
+
+            $this->setCurrentImage($image);
+
+            return $image;
         }
 
         public function clearImage()

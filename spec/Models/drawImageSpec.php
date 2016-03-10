@@ -7,7 +7,8 @@ use Editor\Models\drawImage;
 describe('drawImage', function () {
     beforeEach(function () {
         $this->drawImage = Stub::create([
-            'extends' => drawImage::class
+            'extends' => drawImage::class,
+            'params' => []
         ]);
     });
 
