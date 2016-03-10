@@ -4,8 +4,10 @@
     class drawImage {
         public $current_image = [];
 
-        public function __construct() {
-            //$this->promptUser();
+        public function __construct($function, $params) {
+            $this->setCurrentImage($this->drawNewImage($params[1], $params[2]));
+
+            return $this->getCurrentImage();
         }
 
         protected function getCurrentImage()
@@ -43,6 +45,11 @@
             return $this->drawNewImage($current_image_dimensions['width'], $current_image_dimensions['height']);
         }
 
+        public function getPixelColor($x, $y)
+        {
+            return $this->getCurrentImage()[$y][$x];
+        }
+
         public function colorPixel($x, $y, $c)
         {
             $current_image = $this->getCurrentImage();
@@ -77,5 +84,14 @@
                 }
             }
         }
+
+        // public function fillRegion($x, $y, $c)
+        // {   
+        //     $current_image = $this->getCurrentImage();
+
+        //     $base_color = $this->getPixelColor($x-1, $y-1);
+
+        //     $this->colorPixel($x-1, $y-1, $c);
+        // }
     }
 ?>

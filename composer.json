@@ -10,5 +10,11 @@
         "phpspec/prophecy": "1.4.1",
         "crysalead/kahlan": "~1.1",
         "squizlabs/php_codesniffer": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Editor\\Models\\": "src/Models/",
+            "Editor\\Controllers\\": "src/Controllers/"
+        }
     }
 }
