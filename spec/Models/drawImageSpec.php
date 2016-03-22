@@ -96,19 +96,19 @@ describe('drawImage', function () {
         });
     });
 
-    // describe('->fillRegion()', function () {
-    //     it('draws horizontal line with color R from x=2 to x=3 in row 2', function () {
-    //         $expected = [
-    //             ["O","O","O","O","O"],
-    //             ["O","C","C","C","O"],
-    //             ["O","C","O","C","O"],
-    //             ["O","O","O","O","O"]
-    //         ];
+    describe('->fillRegion()', function () {
+        it('draws horizontal line with color R from x=2 to x=3 in row 2', function () {
+            $expected = [
+                ["O","O","O","O","O"],
+                ["O","C","C","C","O"],
+                ["O","C","O","C","O"],
+                ["O","O","O","O","O"]
+            ];
 
-    //         $this->drawImage->current_image = [["O","O","O","O","O"],["O","R","R","R","O"],["O","R","O","R","O"],["O","O","O","O","O"]];
-    //         $this->drawImage->fillRegion(2, 2, "C");
+            $this->drawImage->current_image = [["O","O","O","O","O"],["O","R","R","R","O"],["O","R","O","R","O"],["O","O","O","O","O"]];
+            $this->drawImage->fillRegion(2, 2, "C");
 
-    //         expect($this->drawImage->current_image)->toEqual($expected);
-    //     });
-    // });
+            expect($this->drawImage->current_image)->toEqual($expected);
+        });
+    });
 });

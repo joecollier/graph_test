@@ -35,7 +35,7 @@
         protected function showImage()
         {
             $image = $this->getCurrentImage();
-            
+
             foreach ($image as $row) {
                 foreach ($row as $pixel) {
                     echo $pixel;
@@ -50,7 +50,7 @@
             return $this->current_image;
         }
 
-        protected function setCurrentImage($new_image) 
+        protected function setCurrentImage($new_image)
         {
             $this->current_image = $new_image;
         }
@@ -103,7 +103,7 @@
         }
 
         public function drawVertical($x, $y1, $y2, $c)
-        {   
+        {
             $current_image = $this->getCurrentImage();
 
             foreach ($current_image as $col_num => $row) {
@@ -114,7 +114,7 @@
         }
 
         public function drawHorizontal($x1, $x2, $y, $c)
-        {   
+        {
             $current_image = $this->getCurrentImage();
 
             foreach ($current_image[($y-1)] as $x_position => $pixel) {
@@ -124,14 +124,14 @@
             }
         }
 
-        // public function fillRegion($x, $y, $c)
-        // {   
-        //     $current_image = $this->getCurrentImage();
+        public function fillRegion($x, $y, $c)
+        {
+            // $current_image = $this->getCurrentImage();
 
-        //     $base_color = $this->getPixelColor($x-1, $y-1);
+            // $base_color = $this->getPixelColor($x-1, $y-1);
 
-        //     $this->colorPixel($x-1, $y-1, $c);
-        // }
+            // $this->colorPixel($x-1, $y-1, $c);
+        }
 
         public function run($params, $current_image = [])
         {
@@ -148,7 +148,7 @@
                 echo "Invalid command!\n";
             }
 
-            return false;  
+            return false;
         }
     }
 ?>
