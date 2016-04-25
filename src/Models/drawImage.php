@@ -124,13 +124,20 @@
             }
         }
 
-        public function fillRegion($x, $y, $c)
+        public function fillRegion($x, $y, $c, $base_color = '')
         {
-            // $current_image = $this->getCurrentImage();
+            $base_color = ($base_color > '')
+                ? $base_color
+                : $this->getPixelColor($x-1, $y-1);
 
-            // $base_color = $this->getPixelColor($x-1, $y-1);
+            if ($this->getPixelColor($x-1, $y-1) == $base_color) {
+                $this->colorPixel($x-1, $y-1, $c);
 
-            // $this->colorPixel($x-1, $y-1, $c);
+                $this->fillRegion($x, $y-1, $c, $base_color);
+                // $this->fillRegion($x-2, $y-1, $c, $base_color);
+                $this->fillRegion($x-1, $y, $c, $base_color);
+                // $this->fillRegion($x-1, $y-2, $c, $base_color);
+            }
         }
 
         public function run($params, $current_image = [])

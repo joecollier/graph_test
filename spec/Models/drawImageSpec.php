@@ -105,7 +105,12 @@ describe('drawImage', function () {
                 ["O","O","O","O","O"]
             ];
 
-            $this->drawImage->current_image = [["O","O","O","O","O"],["O","R","R","R","O"],["O","R","O","R","O"],["O","O","O","O","O"]];
+            $this->drawImage->current_image = [
+                ["O","O","O","O","O"],
+                ["O","R","R","R","O"],
+                ["O","R","O","R","O"],
+                ["O","O","O","O","O"]
+            ];
             $this->drawImage->fillRegion(2, 2, "C");
 
             expect($this->drawImage->current_image)->toEqual($expected);
