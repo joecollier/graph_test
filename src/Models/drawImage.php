@@ -12,11 +12,7 @@
         ];
 
         public $current_image = [];
-
-        public function __construct()
-        {
-
-        }
+        protected $max_coordinate_size = 250;
 
         /* Returns function name corresponding to input value or
          * false if no function is found
@@ -81,7 +77,10 @@
         {
             $current_image_dimensions = $this->getCurrentImageDimensions();
 
-            return $this->drawNewImage($current_image_dimensions['width'], $current_image_dimensions['height']);
+            return $this->drawNewImage(
+                $current_image_dimensions['width'],
+                $current_image_dimensions['height']
+            );
         }
 
         public function getPixelColor($x, $y)
@@ -93,12 +92,18 @@
         {
             $current_image = $this->getCurrentImage();
 
-            if (isset($current_image[$y]) && isset($current_image[$y][$x]) && $current_image[$y][$x]) {
+            if (
+                isset($current_image[$y]) &&
+                isset($current_image[$y][$x]) &&
+                $current_image[$y][$x]
+            ) {
                 $current_image[$y][$x] = $c;
 
                 $this->setCurrentImage($current_image);
             } else {
-                throw new \Exception("Pixel selected to be colored is outside of the image bounderies");
+                throw new \Exception(
+                    "Pixel selected to be colored is outside of the image bounderies"
+                );
             }
         }
 
@@ -124,13 +129,38 @@
             }
         }
 
-        public function fillRegion($x, $y, $c)
+        protected function inRange($x, $y)
         {
-            // $current_image = $this->getCurrentImage();
+            if (isset($this->current_image[$x]) && isset($this->current_image[$x][$y])) {
+                return true;
+            }
 
-            // $base_color = $this->getPixelColor($x-1, $y-1);
+            return false;
+        }
 
-            // $this->colorPixel($x-1, $y-1, $c);
+        public function fillRegion($x, $y, $c, $base_color = '')
+        {
+            $base_color = ($base_color > '')
+                ? $base_color
+                : $this->getPixelColor($x-1, $y-1);
+
+            if ($this->getPixelColor($x-1, $y-1) == $base_color && $this->inRange($x, $y)) {
+                $this->colorPixel($x-1, $y-1, $c);
+
+                // $this->fillRegion($x, $y-1, $c, $base_color);
+                // $this->fillRegion($x-2, $y-1, $c, $base_color);
+                // $this->fillRegion($x-1, $y, $c, $base_color);
+                // $this->fillRegion($x-1, $y-2, $c, $base_color);
+            }
+        }
+
+        protected function validateCoords($x, $y)
+        {
+            if ($x < $this->max_coordinate_size && $y < $this->max_coordinate_size) {
+                return true;
+            }
+
+            return false;
         }
 
         public function run($params, $current_image = [])
@@ -138,12 +168,16 @@
             $function_name = $this->getFunctionName($params[0]);
 
             if ($function_name) {
-                $this->setCurrentImage($current_image);
+                if ($this->validateCoords($params[1], $params[2])) {
+                    $this->setCurrentImage($current_image);
 
-                array_shift($params);
-                call_user_func_array([$this, $function_name], $params);
+                    array_shift($params);
+                    call_user_func_array([$this, $function_name], $params);
 
-                return $this->getCurrentImage();
+                    return $this->getCurrentImage();
+                } else {
+                    echo "Please enter dimensions less than {$this->max_coordinate_size}\n";
+                }
             } else {
                 echo "Invalid command!\n";
             }

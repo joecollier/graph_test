@@ -8,7 +8,7 @@
         protected $current_image_state = [];
 
         public function __construct() {
-            //$this->promptUser();
+            $this->promptUser();
         }
 
         /* Prompts user for input continously until the session is terminated
@@ -47,8 +47,11 @@
          * @return bool
          */
         function parseUserInput($input) {
-            if (!is_string($input) || $input == "x") {
+            if (!is_string($input)) {
                 return false;
+            } elseif (strtoupper($input) == "X") {
+                echo "\nterminating...\n";
+                die();
             }
 
             return $this->handleInput($input);
