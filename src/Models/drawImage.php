@@ -126,7 +126,29 @@
 
         public function fillRegion($x, $y, $c)
         {
-            // $current_image = $this->getCurrentImage();
+            $current_image = $this->getCurrentImage();
+
+            var_dump($current_image);
+
+            $target_color = $this->getPixelColor(($x-1), ($y-1));
+
+            var_dump($target_color);
+
+            // var_export($current_image);
+            // var_dump(sizeof($current_image));
+
+            $y_size = sizeof($current_image);
+
+            $x = 0;
+
+            foreach ($current_image[0] as $x_val) {
+                $x++;
+                $x_size = $x;
+            }
+
+            var_dump($x_size, $y_size);
+
+            die();
 
             // $base_color = $this->getPixelColor($x-1, $y-1);
 

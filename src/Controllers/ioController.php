@@ -8,7 +8,7 @@
         protected $current_image_state = [];
 
         public function __construct() {
-            //$this->promptUser();
+            // $this->promptUser();
         }
 
         /* Prompts user for input continously until the session is terminated
