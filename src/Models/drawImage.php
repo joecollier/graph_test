@@ -8,7 +8,8 @@
             "L" => 'colorPixel',
             "V" => 'drawVertical',
             "H" => 'drawHorizontal',
-            "S" => 'showImage'
+            "S" => 'showImage',
+            "F" => 'fillRegion'
         ];
 
         public $current_image = [];
@@ -84,16 +85,18 @@
             return $this->drawNewImage($current_image_dimensions['width'], $current_image_dimensions['height']);
         }
 
-        public function getPixelColor($x, $y)
-        {
-            return $this->getCurrentImage()[$y][$x];
-        }
-
         public function colorPixel($x, $y, $c)
         {
+            $x = ($x-1);
+            $y = ($y-1);
+
             $current_image = $this->getCurrentImage();
 
-            if (isset($current_image[$y]) && isset($current_image[$y][$x]) && $current_image[$y][$x]) {
+            if (
+                isset($current_image[$y]) &&
+                isset($current_image[$y][$x]) &&
+                $current_image[$y][$x]
+            ) {
                 $current_image[$y][$x] = $c;
 
                 $this->setCurrentImage($current_image);
@@ -108,7 +111,7 @@
 
             foreach ($current_image as $col_num => $row) {
                 if ($col_num >= ($y1-1) && $col_num <= ($y2-1)) {
-                    $this->colorPixel(($x-1), $col_num, $c);
+                    $this->colorPixel(($x), $col_num+1, $c);
                 }
             }
         }
@@ -119,40 +122,92 @@
 
             foreach ($current_image[($y-1)] as $x_position => $pixel) {
                 if ($x_position >= ($x1-1) && $x_position <= ($x2-1)) {
-                    $this->colorPixel($x_position, ($y-1), $c);
+                    $this->colorPixel(($x_position+1), $y, $c);
                 }
             }
         }
 
-        public function fillRegion($x, $y, $c)
+        protected function flood($current_image, $x, $y, $target_color, $new_color, $x_max, $y_max)
+        {
+            if (
+                isset($current_image[$x]) &&
+                isset($current_image[$x][$y]) &&
+                $current_image[$x][$y] == $target_color
+            ) {
+                $current_image[$x][$y] = $new_color;
+
+                if ($x > 0) {
+                    $current_image = $this->flood(
+                        $current_image,
+                        ($x-1),
+                        $y,
+                        $target_color,
+                        $new_color,
+                        $x_max,
+                        $y_max
+                    );
+                }
+
+                if ($x < $x_max) {
+                    $current_image = $this->flood(
+                        $current_image,
+                        ($x+1),
+                        $y,
+                        $target_color,
+                        $new_color,
+                        $x_max,
+                        $y_max
+                    );
+                }
+
+                if ($y > 0) {
+                    $current_image = $this->flood(
+                        $current_image,
+                        $x,
+                        ($y-1),
+                        $target_color,
+                        $new_color,
+                        $x_max,
+                        $y_max
+                    );
+                }
+
+                if ($y < $y_max) {
+                    $current_image = $this->flood(
+                        $current_image,
+                        $x,
+                        ($y+1),
+                        $target_color,
+                        $new_color,
+                        $x_max,
+                        $y_max
+                    );
+                }
+            }
+
+            return $current_image;
+        }
+
+        public function fillRegion($x, $y, $new_color)
         {
             $current_image = $this->getCurrentImage();
 
-            var_dump($current_image);
+            $target_color = $current_image[($x-1)][($y-1)];
 
-            $target_color = $this->getPixelColor(($x-1), ($y-1));
+            $dimensions = $this->getCurrentImageDimensions();
 
-            var_dump($target_color);
+            $x_max = $dimensions['width'];
+            $y_max = $dimensions['height'];
 
-            // var_export($current_image);
-            // var_dump(sizeof($current_image));
-
-            $y_size = sizeof($current_image);
-
-            $x = 0;
-
-            foreach ($current_image[0] as $x_val) {
-                $x++;
-                $x_size = $x;
-            }
-
-            var_dump($x_size, $y_size);
-
-            die();
-
-            // $base_color = $this->getPixelColor($x-1, $y-1);
-
-            // $this->colorPixel($x-1, $y-1, $c);
+            $this->current_image = $this->flood(
+                $current_image,
+                ($x-1),
+                ($y-1),
+                $target_color,
+                $new_color,
+                $x_max,
+                $y_max
+            );
         }
 
         public function run($params, $current_image = [])
