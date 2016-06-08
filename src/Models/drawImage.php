@@ -14,11 +14,6 @@
 
         public $current_image = [];
 
-        public function __construct()
-        {
-
-        }
-
         /* Returns function name corresponding to input value or
          * false if no function is found
          *
@@ -127,7 +122,7 @@
             }
         }
 
-        protected function flood($current_image, $x, $y, $target_color, $new_color, $x_max, $y_max)
+        protected function fillAdjacent($current_image, $x, $y, $target_color, $new_color, $x_max, $y_max)
         {
             if (
                 isset($current_image[$x]) &&
@@ -137,7 +132,7 @@
                 $current_image[$x][$y] = $new_color;
 
                 if ($x > 0) {
-                    $current_image = $this->flood(
+                    $current_image = $this->fillAdjacent(
                         $current_image,
                         ($x-1),
                         $y,
@@ -149,7 +144,7 @@
                 }
 
                 if ($x < $x_max) {
-                    $current_image = $this->flood(
+                    $current_image = $this->fillAdjacent(
                         $current_image,
                         ($x+1),
                         $y,
@@ -161,7 +156,7 @@
                 }
 
                 if ($y > 0) {
-                    $current_image = $this->flood(
+                    $current_image = $this->fillAdjacent(
                         $current_image,
                         $x,
                         ($y-1),
@@ -173,7 +168,7 @@
                 }
 
                 if ($y < $y_max) {
-                    $current_image = $this->flood(
+                    $current_image = $this->fillAdjacent(
                         $current_image,
                         $x,
                         ($y+1),
@@ -199,7 +194,7 @@
             $x_max = $dimensions['width'];
             $y_max = $dimensions['height'];
 
-            $this->current_image = $this->flood(
+            $this->current_image = $this->fillAdjacent(
                 $current_image,
                 ($x-1),
                 ($y-1),
