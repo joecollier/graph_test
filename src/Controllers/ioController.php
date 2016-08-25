@@ -7,24 +7,10 @@
     class ioController {
         protected $current_image_state = [];
 
-        public function __construct() {
-            // $this->promptUser();
-        }
-
-        /* Prompts user for input continously until the session is terminated
-         */
-        function promptUser() {
-            do {
-                echo "Please enter a valid command: ";
-                $input = rtrim(fgets(STDIN), "\n\r");
-            } while ($this->parseUserInput($input));
-        }
-
         /* Calls drawImage model and passes in params in order to generate and
          * display image
          *
          * @param string $input
-         *
          * @return bool
          */
         function handleInput($input)
@@ -43,17 +29,26 @@
          * shown, or if the application should be terminated.
          *
          * @param string $input
-         *
          * @return bool
          */
         function parseUserInput($input) {
-            if (!is_string($input) || $input == "x") {
+            if ($input == "X") {
+                echo "terminating...\n";
+                die();
+            } elseif (!is_string($input)) {
                 return false;
             }
 
             return $this->handleInput($input);
         }
-    }
 
-    $obj = new ioController();
+        /* Prompts user for input continously until the session is terminated
+         */
+        public function promptUser() {
+            do {
+                echo "Please enter a valid command: ";
+                $input = rtrim(fgets(STDIN), "\n\r");
+            } while ($this->parseUserInput($input));
+        }
+    }
 ?>

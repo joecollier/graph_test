@@ -13,7 +13,9 @@
     },
     "autoload": {
         "psr-4": {
+            "Editor\\App\\": "src/App/",
             "Editor\\Models\\": "src/Models/",
+            "Editor\\Helpers\\": "src/Helpers/",
             "Editor\\Controllers\\": "src/Controllers/"
         }
     }

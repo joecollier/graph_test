@@ -1,5 +1,8 @@
 <?php
     namespace Editor\Models;
+    use Editor\Helpers\Validator;
+
+    require "vendor/autoload.php";
 
     class drawImage {
         protected $command_function_map = [
@@ -66,11 +69,16 @@
 
         public function drawNewImage($x, $y)
         {
-            $image = array_fill(0, $y, array_fill(0, $x, "O"));
+            $validator = new Validator;
 
-            $this->setCurrentImage($image);
+            if ($validator->isValidDimensions($x, $y)) {
+                $image = array_fill(0, $y, array_fill(0, $x, "O"));
+                $this->setCurrentImage($image);
 
-            return $image;
+                return $image;
+            } else {
+                echo "Please enter valid dimensions!\n";
+            }
         }
 
         public function clearImage()
