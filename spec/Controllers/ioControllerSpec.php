@@ -5,7 +5,7 @@ use kahlan\plugin\Stub;
 use kahlan\plugin\Monkey;
 use Editor\Controllers\ioController;
 
-describe('ioController', function () {
+xdescribe('ioController', function () {
     beforeEach(function () {
         $this->ioController = Stub::create([
             'extends' => ioController::class
@@ -14,23 +14,11 @@ describe('ioController', function () {
 
     describe('->parseUserInput()', function () {
         it('returns truthy value string is entered is string is not "x"', function () {
-            expect($this->ioController->parseUserInput('a'))->toBeTruthy();
+            expect($this->ioController->parseUserInput('A'))->toBeTruthy();
         });
 
-        it('returns truthy value string is entered is string is "x"', function () {
-            expect($this->ioController->parseUserInput('x'))->toBeFalsy();
-        });
-    });
-
-    describe('->parseUserInput()', function () {
-        beforeEach(function () {
-            Monkey::patch('fgets', function(){return "x";});
-        });
-
-        it('returns truthy value string is entered is string is "x"', function () {
-            expect($this->ioController)->toReceive('parseUserInput')->with("x");
-
-            $this->ioController->promptUser();
+        it('returns falsy value string is entered is string is "x"', function () {
+            expect($this->ioController->parseUserInput('X'))->toBeFalsy();
         });
     });
 });

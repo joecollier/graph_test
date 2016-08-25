@@ -2,12 +2,12 @@
 namespace Editor\Helpers;
 
 use kahlan\plugin\Stub;
-use Editor\Helpers\validateParams;
+use Editor\Helpers\validator;
 
-describe('validateParams', function () {
+describe('validator', function () {
     beforeEach(function () {
         $this->validateParams = Stub::create([
-            'extends' => validateParams::class,
+            'extends' => validator::class,
             'params' => []
         ]);
     });

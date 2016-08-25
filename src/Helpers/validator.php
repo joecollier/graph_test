@@ -15,11 +15,9 @@
         {
             if ($this->isValidDimension($x) && $this->isValidDimension($y)) {
                 return true;
-            } else {
-                return
-                    "Dimensions must be between {$this->min_dimension} and " .
-                    "{$this->max_dimension}\n";
             }
+
+            return false;
         }
     }
 ?>

@@ -1,15 +1,19 @@
 <?php
-    namespace Editor\App;
-    use Editor\Controllers\ioController;
+namespace Editor\App;
 
-    require "vendor/autoload.php";
+use Editor\App\App;
 
-    class app {
-        public function __construct() {
-	    	$io = new ioController;
-	    	$io->promptUser();
-        }
+class App
+{
+    protected $io;
+
+    public function __construct(ioController $controller)
+    {
+    	$this->io_controller = $controller;
     }
 
-	$obj = new app();
-?>
+    public function run()
+    {
+    	$this->io_controller->promptUser();
+    }
+}
