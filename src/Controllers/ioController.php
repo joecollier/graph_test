@@ -46,7 +46,7 @@
          */
         public function promptUser() {
             do {
-                echo "Please enter a valid command: ";
+                echo "Please enter command: ";
                 $input = rtrim(fgets(STDIN), "\n\r");
             } while ($this->parseUserInput($input));
         }

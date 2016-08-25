@@ -71,13 +71,15 @@
         {
             $validator = new Validator;
 
-            if ($validator->isValidDimensions($x, $y)) {
+            $is_valid = $validator->isValidDimensions($x, $y);
+
+            if ($is_valid === true) {
                 $image = array_fill(0, $y, array_fill(0, $x, "O"));
                 $this->setCurrentImage($image);
 
                 return $image;
             } else {
-                echo "Please enter valid dimensions!\n";
+                echo $is_valid;
             }
         }
 
