@@ -1,10 +1,9 @@
 <?php
 namespace Editor\Controllers;
+
 use Editor\Models\drawImage;
 
-require "vendor/autoload.php";
-
-class ioController
+class IoController
 {
     protected $current_image_state = [];
 
@@ -32,7 +31,8 @@ class ioController
      * @param string $input
      * @return bool
      */
-    private function parseUserInput($input) {
+    private function parseUserInput($input)
+    {
         if ($input == "X") {
             echo "terminating...\n";
             return false;
@@ -45,11 +45,11 @@ class ioController
 
     /* Prompts user for input continously until the session is terminated
      */
-    public function promptUser() {
+    public function promptUser()
+    {
         do {
             echo "Please enter command: ";
             $input = rtrim(fgets(STDIN), "\n\r");
         } while ($this->parseUserInput($input));
     }
 }
-?>

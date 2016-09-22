@@ -1,10 +1,12 @@
 <?php
 namespace Editor\Models;
+
 use Editor\Helpers\Validator;
 
-require "vendor/autoload.php";
-
-class drawImage
+/**
+ * DrawImage
+ */
+class DrawImage
 {
     protected $command_function_map = [
         "I" => 'drawNewImage',
@@ -70,20 +72,25 @@ class drawImage
 
     public function drawNewImage($x, $y)
     {
-        $image = array_fill(0, $y, array_fill(0, $x, "O"));
-        $this->setCurrentImage($image);
+        $validator = new Validator;
 
-        return $image;
+        $is_valid = $validator->isValidDimensions($x, $y);
+
+        if ($is_valid === true) {
+            $image = array_fill(0, $y, array_fill(0, $x, "O"));
+            $this->setCurrentImage($image);
+
+            return $image;
+        } else {
+            echo $is_valid;
+        }
     }
 
     public function clearImage()
     {
         $current_image_dimensions = $this->getCurrentImageDimensions();
 
-        return $this->drawNewImage(
-            $current_image_dimensions['width'],
-            $current_image_dimensions['height']
-        );
+        return $this->drawNewImage($current_image_dimensions['width'], $current_image_dimensions['height']);
     }
 
     public function colorPixel($x, $y, $c)
@@ -93,8 +100,7 @@ class drawImage
 
         $current_image = $this->getCurrentImage();
 
-        if (
-            isset($current_image[$y]) &&
+        if (isset($current_image[$y]) &&
             isset($current_image[$y][$x]) &&
             $current_image[$y][$x]
         ) {
@@ -128,59 +134,15 @@ class drawImage
         }
     }
 
-    protected function getCoordinates($x, $y, $x_max, $y_max)
+    protected function fillAdjacent($current_image, $x, $y, $target_color, $new_color, $x_max, $y_max)
     {
-        $coordinates = [];
-
-        if ($x > 0) {
-            $coordinates[] = [
-                'x' => $x - 1,
-                'y' => $y
-            ];
-        } elseif ($x < $x_max) {
-            $coordinates[] = [
-                'x' => $x + 1,
-                'y' => $y
-            ];
-        } elseif ($y > 0) {
-            $coordinates[] = [
-                'x' => $x,
-                'y' => $y - 1
-            ];
-        } elseif ($y < $y_max) {
-            $coordinates[] = [
-                'x' => $x,
-                'y' => $y +1
-            ];
-        }
-
-        return $coordinates;
-    }
-
-    protected function fillAdjacent(array $current_image, $x, $y, $target_color, $new_color, $x_max, $y_max)
-    {
-        if (
-            isset($current_image[$x]) &&
+        if (isset($current_image[$x]) &&
             isset($current_image[$x][$y]) &&
             $current_image[$x][$y] == $target_color
         ) {
             $current_image[$x][$y] = $new_color;
 
-            $coordinates = $this->getCoordinates($x, $y, $x_max, $y_max);
-
-            foreach ($coordinates as $coordinate) {
-                $current_image = $this->fillAdjacent(
-                    $current_image,
-                    $coordinate['x'],
-                    $coordinate['y'],
-                    $target_color,
-                    $new_color,
-                    $x_max,
-                    $y_max
-                );
-            }
-
-            /*if ($x > 0) {
+            if ($x > 0) {
                 $current_image = $this->fillAdjacent(
                     $current_image,
                     ($x-1),
@@ -226,7 +188,7 @@ class drawImage
                     $x_max,
                     $y_max
                 );
-            }*/
+            }
         }
 
         return $current_image;
@@ -271,21 +233,4 @@ class drawImage
 
         return false;
     }
-
-    /*public function run($params, $current_image = [])
-    {
-        $function_name = $this->getFunctionName($params[0]);
-
-        if (!$function_name) {
-            echo "Invalid command!\n";
-            return false;
-        }
-
-        $this->setCurrentImage($current_image);
-
-        array_shift($params);
-        $this->$function_name($params);
-
-        return $this->getCurrentImage();
-    }*/
 }
