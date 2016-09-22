@@ -5,20 +5,23 @@ use kahlan\plugin\Stub;
 use kahlan\plugin\Monkey;
 use Editor\Controllers\IoController;
 
-xdescribe('IoController', function () {
+describe(IoController::class, function () {
     beforeEach(function () {
-        $this->IoController = Stub::create([
-            'extends' => IoController::class
-        ]);
+        $this->io_controller = new IoController();
+        Stub::on($this->io_controller)->method('handleInput')->andReturn(true);
+
+        $reflectionClass = new \ReflectionClass($this->io_controller);
+        $this->parseUserInput = $reflectionClass->getMethod('parseUserInput');
+        $this->parseUserInput->setAccessible(true);
     });
 
     describe('->parseUserInput()', function () {
         it('returns truthy value string is entered is string is not "x"', function () {
-            expect($this->IoController->parseUserInput('A'))->toBeTruthy();
+            expect($this->parseUserInput->invokeArgs($this->io_controller, ['A']))->toBeTruthy();
         });
 
         it('returns falsy value string is entered is string is "x"', function () {
-            expect($this->IoController->parseUserInput('X'))->toBeFalsy();
+            expect($this->parseUserInput->invokeArgs($this->io_controller, ['X']))->toBeFalsy();
         });
     });
 });
