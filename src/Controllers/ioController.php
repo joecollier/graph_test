@@ -2,10 +2,11 @@
 namespace Editor\Controllers;
 
 use Editor\Models\drawImage;
+use Editor\Controllers\MessageHandler;
 
 class IoController
 {
-    protected $current_image_state = [];
+    // protected $current_image_state = [];
 
     /* Calls drawImage model and passes in params in order to generate and
      * display image
@@ -17,10 +18,10 @@ class IoController
     {
         $parsed_input = explode(" ", $input);
 
-        $image = new drawImage();
-        $image->run($parsed_input, $this->current_image_state);
+        $drawImage = new drawImage();
+        $this->image = $drawImage->run($parsed_input, $this->image);
 
-        $this->current_image_state = $image->current_image;
+        // $this->current_image_state = $image->pixels;
 
         return true;
     }
@@ -34,7 +35,7 @@ class IoController
     private function parseUserInput($input)
     {
         if ($input == "X") {
-            echo "terminating...\n";
+            MessageHandler::output("terminating...");
             return false;
         } elseif (!is_string($input)) {
             return false;
@@ -48,7 +49,7 @@ class IoController
     public function promptUser()
     {
         do {
-            echo "Please enter command: ";
+            MessageHandler::output("Please enter command: ");
             $input = rtrim(fgets(STDIN), "\n\r");
         } while ($this->parseUserInput($input));
     }
