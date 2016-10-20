@@ -5,7 +5,7 @@ use Editor\Helpers\Validator;
 use Editor\Controllers\MessageHandler;
 
 /**
- * Image
+ * Contains functions for displaying and manipulating the image
  */
 class Image
 {
@@ -20,15 +20,12 @@ class Image
         $this->current_height = $height;
 
         $this->clearImage();
-
-        // $this->pixels = [];
-        // $this->pixels = array_fill(
-        //     0,
-        //     $height,
-        //     array_fill(0, $width, $this->default_color)
-        // );
     }
 
+    /**
+     * Returns array containing width and height values
+     * @return array
+     */
     public function getImageDimensions()
     {
         $width = $this->current_width;
@@ -47,6 +44,12 @@ class Image
         ];
     }
 
+    /**
+     * Colors single pixel in the image
+     * @param string $x
+     * @param string $y
+     * @param string $c
+     */
     public function colorPixel($x, $y, $c)
     {
         $x += -1;
@@ -58,16 +61,23 @@ class Image
         ) {
             $this->pixels[$y][$x] = $c;
         } else {
-            // $error = sprintf(
-            //     "Pixels selected to be colored is outside of the current image dimensions. [%s,%s]",
-            //     $x,
-            //     $y
-            // );
+            $error = sprintf(
+                "Pixels selected to be colored is outside of the current image dimensions. [%s,%s]",
+                $x,
+                $y
+            );
 
-            // throw new \Exception($error);
+            throw new \Exception($error);
         }
     }
 
+    /**
+     * Draws a line from y1 to y2 in the x-column
+     * @param string $x
+     * @param string $y1
+     * @param string $y2
+     * @param string $c
+     */
     public function drawVertical($x, $y1, $y2, $c)
     {
         foreach ($this->pixels as $col_num => $row) {
@@ -77,19 +87,33 @@ class Image
         }
     }
 
+    /**
+     * Draws a line from x1 to x2 in the y-column
+     * @param  string $x1
+     * @param  string $x2
+     * @param  string $y
+     * @param  string $c
+     */
     public function drawHorizontal($x1, $x2, $y, $c)
     {
         foreach ($this->pixels[($y-1)] as $x_position => $pixel) {
-            // var_dump($x_position >= ($x1-1) && $x_position <= ($x2-1));
-            // var_dump($x_position, ($x1-1), ($x2-1));
-            // die();
-
             if ($x_position >= ($x1-1) && $x_position <= ($x2-1)) {
                 $this->colorPixel(($x_position+1), $y, $c);
             }
         }
     }
 
+    /**
+     * [fillAdjacent description]
+     * @param Image $current_image
+     * @param string $x
+     * @param string $y
+     * @param string $target_color
+     * @param string $new_color
+     * @param string $x_max
+     * @param string $y_max
+     * @return Image $current_image
+     */
     protected function fillAdjacent(
         $current_image,
         $x,
@@ -157,6 +181,12 @@ class Image
         return $current_image;
     }
 
+    /**
+     * fills region by changing all R pixels connected pixel at a given point
+     * @param  string $x
+     * @param  string $y
+     * @param  string $new_color
+     */
     public function fillRegion($x, $y, $new_color)
     {
         $target_color = $this->pixels[($x-1)][($y-1)];
@@ -176,6 +206,9 @@ class Image
         );
     }
 
+    /**
+     * Sets pixels to default values
+     */
     public function clearImage()
     {
         $dimensions = $this->getImageDimensions();
@@ -187,12 +220,29 @@ class Image
         );
     }
 
+    /**
+     * Display image for debugging purposes
+     */
     public function displayDebug()
     {
         foreach ($this->pixels as $row) {
             var_dump(json_encode($row, true));
         }
         echo "\n\n";
+    }
+
+    /**
+     * Displays image to user. Command: S
+     */
+    public function showImage()
+    {
+        foreach ($this->pixels as $row) {
+            foreach ($row as $pixel) {
+                echo $pixel;
+            }
+
+            MessageHandler::output('');
+        }
     }
 
     public function getImage()

@@ -7,11 +7,6 @@ use Editor\Models\Image;
 describe('Image', function () {
     beforeEach(function () {
         $this->image = new Image(5, 5);
-
-        // $this->image = Stub::create([
-        //     'extends' => image::class,
-        //     'params' => []
-        // ]);
     });
 
     describe('->drawNewImage()', function () {

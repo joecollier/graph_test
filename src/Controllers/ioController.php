@@ -6,7 +6,7 @@ use Editor\Controllers\MessageHandler;
 
 class IoController
 {
-    // protected $current_image_state = [];
+    protected $current_image_state = [];
 
     /* Calls drawImage model and passes in params in order to generate and
      * display image
@@ -18,10 +18,10 @@ class IoController
     {
         $parsed_input = explode(" ", $input);
 
-        $drawImage = new drawImage();
-        $this->image = $drawImage->run($parsed_input, $this->image);
+        $image = new drawImage();
+        $image->run($parsed_input, $this->current_image_state);
 
-        // $this->current_image_state = $image->pixels;
+        $this->current_image_state = $image->current_image;
 
         return true;
     }
