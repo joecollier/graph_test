@@ -12,4 +12,4 @@ Note: xdebug must be installed and enabled in order to run kahlan tests
 
 ---
 
-php -f src/Controllers/ioController.php
+php -f src/main.php
