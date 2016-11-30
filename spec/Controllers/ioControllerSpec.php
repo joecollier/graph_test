@@ -3,34 +3,25 @@ namespace Editor\Controllers;
 
 use kahlan\plugin\Stub;
 use kahlan\plugin\Monkey;
-use Editor\Controllers\ioController;
+use Editor\Controllers\IoController;
 
-describe('ioController', function () {
+describe(IoController::class, function () {
     beforeEach(function () {
-        $this->ioController = Stub::create([
-            'extends' => ioController::class
-        ]);
+        $this->io_controller = new IoController();
+        Stub::on($this->io_controller)->method('handleInput')->andReturn(true);
+
+        $reflectionClass = new \ReflectionClass($this->io_controller);
+        $this->parseUserInput = $reflectionClass->getMethod('parseUserInput');
+        $this->parseUserInput->setAccessible(true);
     });
 
     describe('->parseUserInput()', function () {
         it('returns truthy value string is entered is string is not "x"', function () {
-            expect($this->ioController->parseUserInput('a'))->toBeTruthy();
+            expect($this->parseUserInput->invokeArgs($this->io_controller, ['A']))->toBeTruthy();
         });
 
-        it('returns truthy value string is entered is string is "x"', function () {
-            expect($this->ioController->parseUserInput('x'))->toBeFalsy();
-        });
-    });
-
-    describe('->parseUserInput()', function () {
-        beforeEach(function () {
-            Monkey::patch('fgets', function(){return "x";});
-        });
-
-        it('returns truthy value string is entered is string is "x"', function () {
-            expect($this->ioController)->toReceive('parseUserInput')->with("x");
-
-            $this->ioController->promptUser();
+        it('returns falsy value string is entered is string is "x"', function () {
+            expect($this->parseUserInput->invokeArgs($this->io_controller, ['X']))->toBeFalsy();
         });
     });
 });
